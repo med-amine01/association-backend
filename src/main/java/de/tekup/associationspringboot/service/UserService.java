@@ -33,6 +33,7 @@ public class UserService {
             if(!roleList.isEmpty()){
                 user.setRoles(roleList);
             }
+            user.setUserPassword(getEncodedPassword(user.getUserPassword()));
             return userRepository.save(user);
         }
         return null;

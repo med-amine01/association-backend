@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
                 //this will permit requests that they don't require authentication
-                // "/autheticate" : we don't want to applay authenticatation on authenticate endpoint
+                // "/authenticate" : we don't want to applay authenticatation on authenticate endpoint
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 //AND REST WILL BE AUTHENTICATED
