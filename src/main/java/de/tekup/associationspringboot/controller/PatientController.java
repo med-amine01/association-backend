@@ -14,6 +14,11 @@ public class PatientController {
 
     private PatientService patientService;
 
+    //Generate data by hitting this endpoint from POSTMAN
+    @GetMapping("/generate")
+    public Iterable<Patient> generateData(){
+        return patientService.generateData();
+    }
     @GetMapping("/{id}")
     public Patient getPatientById(@PathVariable("id") Long id){
         return patientService.getPatient(id);

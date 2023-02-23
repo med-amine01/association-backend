@@ -1,5 +1,6 @@
 package de.tekup.associationspringboot.service;
 
+import com.github.javafaker.Faker;
 import de.tekup.associationspringboot.entity.Patient;
 import de.tekup.associationspringboot.repository.PatientRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,23 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 public class PatientService {
     private PatientRepository patientRepository;
+
+
+    //GENERATING FAKE DATA FOR PATIENT
+    public Iterable<Patient> generateData(){
+        Faker faker = new Faker();
+        List<Patient> patientList = new ArrayList<>();
+        for(int i=0; i<30; i++){
+            Patient p = new Patient();
+            p.setPName(faker.name().fullName());
+            p.setPNumber(faker.phoneNumber().phoneNumber());
+            p.setPAddress(faker.address().fullAddress());
+            p.setHealthStatus("Emergency");
+            p.setFundingNeeded(faker.number().randomDouble(2,150,9999));
+            patientList.add(p);
+        }
+        return patientRepository.saveAll(patientList);
+    }
 
     public Patient getPatient(Long id){
         return patientRepository.findById(id)

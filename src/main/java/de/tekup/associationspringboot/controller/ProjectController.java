@@ -14,6 +14,11 @@ public class ProjectController {
 
     private ProjectService projectService;
 
+    //GENERATE FAKE DATA BY HITTING THIS ENDPOINT
+    @GetMapping("/generate")
+    public Iterable<Project> generateData(){
+        return this.projectService.generateData();
+    }
     @GetMapping("/{id}")
     public Project getProjectById(@PathVariable("id") Long id){
         return projectService.getProject(id);

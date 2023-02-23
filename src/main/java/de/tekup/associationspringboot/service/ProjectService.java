@@ -1,5 +1,7 @@
 package de.tekup.associationspringboot.service;
 
+import com.github.javafaker.Faker;
+import de.tekup.associationspringboot.entity.Patient;
 import de.tekup.associationspringboot.entity.Project;
 import de.tekup.associationspringboot.repository.ProjectRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,29 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 public class ProjectService {
     private ProjectRepository projectRepository;
+
+    //GENERATING FAKE DATA FOR PATIENT
+    public Iterable<Project> generateData(){
+        Faker faker = new Faker();
+        List<Project> projectList = new ArrayList<>();
+        for(int i=0; i<15; i++){
+            Project p = new Project();
+            p.setProjectName(faker.company().name());
+            p.setEstimatedBudget(faker.number().randomDouble(2,999,9999));
+            p.setTotalAmountSpent(faker.number().randomDouble(2,999,9999));
+            p.setProjectLeader(faker.name().fullName());
+            p.setProjectDescription(faker.howIMetYourMother().catchPhrase());
+            p.setDuration(String.valueOf(faker.number().randomDigit()));
+            if(p.getTotalAmountSpent() >= p.getEstimatedBudget()){
+                p.setProjectStatus("Success");
+            }
+            else{
+                p.setProjectStatus("On Hold");
+            }
+            projectList.add(p);
+        }
+        return projectRepository.saveAll(projectList);
+    }
 
     public Project getProject(Long id){
         return projectRepository.findById(id)
