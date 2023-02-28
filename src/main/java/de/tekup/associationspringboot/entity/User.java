@@ -14,7 +14,8 @@ public class User {
     private String userLastName;
     private String userPassword;
     private String phone;
-    private String adress;
+    private String address;
+    private boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     //this will create third table called USER_ROLE with two columns =>  USER_ID ; ROLE_ID

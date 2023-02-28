@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -21,10 +18,41 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
-    public User registerNewUser(User user){
+    public List<User> getAll(){
+        List<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
+        return users;
+    }
 
-        User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
-        if(fetchedUser == null){
+    public User getUser(String userEmail){
+        return userRepository.findById(userEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
+    }
+
+    public User updateUser(User user){
+        if(userRepository.existsById(user.getUserEmail())){
+            Set<Role> roleList = new HashSet<>();
+            user.getRoles().forEach(r -> {
+                roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
+            });
+
+            if(!roleList.isEmpty()){
+                user.setRoles(roleList);
+            }
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    public void deleteUser(String userEmail){
+        if(!userRepository.existsById(userEmail)){
+            throw new NoSuchElementException("No user found");
+        }
+        userRepository.deleteById(userEmail);
+    }
+
+    public User registerNewUser(User user){
+        //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
+        if(!userRepository.existsById(user.getUserEmail())){
             Set<Role> roleList = new HashSet<>();
             user.getRoles().forEach(r -> {
                 roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
@@ -34,10 +62,12 @@ public class UserService {
                 user.setRoles(roleList);
             }
             user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+            user.setActive(false);
             return userRepository.save(user);
         }
         return null;
     }
+
 
     public void initRolesAndUsers(){
 
@@ -79,6 +109,7 @@ public class UserService {
         adminUser.setUserFirstName("Admin");
         adminUser.setUserLastName("Admin");
         adminUser.setUserPassword(getEncodedPassword("admin123"));
+        adminUser.setActive(true);
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(adminRole);
         //SETTING ADMIN ROLE
