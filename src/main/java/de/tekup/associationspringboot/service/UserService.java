@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -28,15 +29,33 @@ public class UserService {
         return userRepository.findById(userEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
     }
 
-    public User updateUser(User user){
-        if(userRepository.existsById(user.getUserEmail())){
-            Set<Role> roleList = new HashSet<>();
-            user.getRoles().forEach(r -> {
-                roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
-            });
+    @Transactional
+    public User updateUser(User user, String oldEmail){
+        User user1 = userRepository.findById(oldEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
 
-            if(!roleList.isEmpty()){
-                user.setRoles(roleList);
+
+        //if the new Email exists in data base
+        if(!userRepository.existsById(user.getUserEmail())) {
+
+            if (!user.getRoles().isEmpty()) {
+                Set<Role> roleList = new HashSet<>();
+                user.getRoles().forEach(r -> {
+                    roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
+                });
+            } else {
+                //setting the same roles
+                user.setRoles(user1.getRoles());
+            }
+
+            if (user.getUserPassword() == null) {
+                user.setUserPassword(getEncodedPassword(user1.getUserPassword()));
+            } else {
+                user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+            }
+
+            //checking if the user updates his email
+            if (user.getUserEmail() != null) {
+                userRepository.updateUserEmail(user.getUserEmail(), oldEmail);
             }
             return userRepository.save(user);
         }
