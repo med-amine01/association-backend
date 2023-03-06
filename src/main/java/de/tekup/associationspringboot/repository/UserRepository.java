@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User,String> {
 
-    @Modifying
-    @Query("UPDATE User u SET u.userEmail = ?1 WHERE u.userEmail = ?2")
-    void updateUserEmail(String newEmail, String oldEmail);
+//    @Modifying
+//    @Query("UPDATE User u SET u.userEmail = ?1 WHERE u.userEmail = ?2")
+//    void updateUserEmail(String newEmail, String oldEmail);
+
+    User findUserByUuid(String uuid);
 }

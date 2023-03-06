@@ -10,6 +10,9 @@ import java.util.Set;
 public class User {
     @Id
     private String userEmail;
+
+    @Column(unique = true)
+    private String uuid;
     private String userFirstName;
     private String userLastName;
     private String userPassword;

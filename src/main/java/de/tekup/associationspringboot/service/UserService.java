@@ -5,6 +5,7 @@ import de.tekup.associationspringboot.entity.User;
 import de.tekup.associationspringboot.repository.RoleRepository;
 import de.tekup.associationspringboot.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,49 +26,90 @@ public class UserService {
         return users;
     }
 
-    public User getUser(String userEmail){
-        return userRepository.findById(userEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
+    public User getUser(String userUid){
+        User u = userRepository.findUserByUuid(userUid);
+        if(u == null){
+            return null;
+        }
+        return userRepository.findUserByUuid(userUid);
     }
 
-    @Transactional
-    public User updateUser(User user, String oldEmail){
-        User user1 = userRepository.findById(oldEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
+//    @Transactional
+//    public User updateUser(User user, String oldEmail){
+//        User user1 = userRepository.findById(oldEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
+//
+//        if(user.getUserEmail() == null){
+//
+//        }
+//        //if the new Email exists in data base
+//        if(!userRepository.existsById(user.getUserEmail())) {
+//
+//            if (!user.getRoles().isEmpty()) {
+//                try {
+//                    Set<Role> roleList = new HashSet<>();
+//                    user.getRoles().forEach(r -> {
+//                        roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
+//                    });
+//                }
+//                catch (Exception e){
+//                    System.out.println(e.getMessage());
+//                }
+//
+//            } else {
+//                //setting the same roles
+//                user.setRoles(user1.getRoles());
+//            }
+//
+//            if (user.getUserPassword() == null) {
+//                user.setUserPassword(getEncodedPassword(user1.getUserPassword()));
+//            } else {
+//                user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+//            }
+//
+//            //checking if the user updates his email
+//            if (user.getUserEmail() != null) {
+//                userRepository.updateUserEmail(user.getUserEmail(), oldEmail);
+//            }
+//            return userRepository.save(user);
+//        }
+//        return null;
+//    }
 
+    public User updateUser(User user, String uuid) {
 
-        //if the new Email exists in data base
-        if(!userRepository.existsById(user.getUserEmail())) {
-
-            if (!user.getRoles().isEmpty()) {
-                Set<Role> roleList = new HashSet<>();
-                user.getRoles().forEach(r -> {
-                    roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
-                });
-            } else {
-                //setting the same roles
-                user.setRoles(user1.getRoles());
-            }
-
-            if (user.getUserPassword() == null) {
-                user.setUserPassword(getEncodedPassword(user1.getUserPassword()));
-            } else {
-                user.setUserPassword(getEncodedPassword(user.getUserPassword()));
-            }
-
-            //checking if the user updates his email
-            if (user.getUserEmail() != null) {
-                userRepository.updateUserEmail(user.getUserEmail(), oldEmail);
-            }
-            return userRepository.save(user);
+        User current = userRepository.findUserByUuid(uuid);
+        if(user.getUserFirstName() != null){
+            current.setUserFirstName(user.getUserFirstName());
         }
-        return null;
+        if(user.getUserLastName() != null){
+            current.setUserLastName(user.getUserLastName());
+        }
+        if(user.getAddress() != null){
+            current.setAddress(user.getAddress());
+        }
+        if(user.getPhone() != null){
+            current.setPhone(user.getPhone());
+        }
+        if(!user.getRoles().isEmpty()){
+            Set<Role> roleList = new HashSet<>();
+            user.getRoles().forEach(r -> {
+                roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
+            });
+
+            if(!roleList.isEmpty()){
+                current.setRoles(roleList);
+            }
+        }
+
+        return userRepository.save(current);
     }
 
     public void deleteUser(String userEmail){
-        if(!userRepository.existsById(userEmail)){
-            throw new NoSuchElementException("No user found");
-        }
-        userRepository.deleteById(userEmail);
+    if(!userRepository.existsById(userEmail)){
+        throw new NoSuchElementException("No user found");
     }
+    userRepository.deleteById(userEmail);
+}
 
     public User registerNewUser(User user){
         //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
@@ -81,6 +123,8 @@ public class UserService {
                 user.setRoles(roleList);
             }
             user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+            //setting uuid to the user
+            user.setUuid(UUID.randomUUID().toString());
             user.setActive(false);
             return userRepository.save(user);
         }
@@ -132,6 +176,7 @@ public class UserService {
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(adminRole);
         //SETTING ADMIN ROLE
+        adminUser.setUuid(UUID.randomUUID().toString());
         adminUser.setRoles(adminRoles);
         userRepository.save(adminUser);
     }

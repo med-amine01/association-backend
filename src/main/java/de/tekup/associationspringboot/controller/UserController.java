@@ -20,26 +20,30 @@ public class UserController {
     @PostMapping("/addUser")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public User addUser(@RequestBody User user){
+        if(userService.registerNewUser(user) == null){
+            throw new ResponseStatusException(HttpStatus.FOUND, "User Already Exists");
+        }
         return  userService.registerNewUser(user);
     }
 
-    @GetMapping("/{userEmail}")
-    public User getUser(@PathVariable("userEmail") String userEmail){
-        return userService.getUser(userEmail);
+    @GetMapping("/{uuid}")
+    public User getUser(@PathVariable("uuid") String userUid){
+        if(userService.getUser(userUid) == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
+        }
+        return userService.getUser(userUid);
     }
     @GetMapping("/getall")
     public List<User> getAll(){
         return userService.getAll();
     }
 
-    @PatchMapping("/update/{oldEmail}")
-    public User updatePatient(@RequestBody User user , @PathVariable String oldEmail){
-        if(userService.updateUser(user,oldEmail) == null){
-            //request value error 302
-            // the new userEmail found in DB so we shouldn't update email
+    @PatchMapping("/update/{uuid}")
+    public User updatePatient(@RequestBody User user, @PathVariable String uuid){
+        if(userService.updateUser(user, uuid) == null){
             throw new ResponseStatusException(HttpStatus.FOUND, "User Email already exists");
         }
-        return userService.updateUser(user, oldEmail);
+        return userService.updateUser(user,uuid);
     }
 
     @DeleteMapping("/delete/{userEmail}")
