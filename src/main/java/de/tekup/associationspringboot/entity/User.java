@@ -3,6 +3,7 @@ package de.tekup.associationspringboot.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,6 +21,8 @@ public class User {
     private String address;
     private boolean active;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Request> requests;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     //this will create third table called USER_ROLE with two columns =>  USER_ID ; ROLE_ID
     @JoinTable(

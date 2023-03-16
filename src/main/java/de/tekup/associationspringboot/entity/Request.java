@@ -10,19 +10,23 @@ import java.util.List;
 
 @Entity
 @Data
-public class Patient {
+public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String pName;
-    private String pNumber;
-    private String pAddress;
-    private String healthStatus;
+    @Enumerated(EnumType.STRING)
+    private RequestStatus requestStatus;
 
-    //amount needed
-    private double fundingNeeded;
+    //amount requested by funder
+    private double requestedAmount;
     @OneToMany
     private List<RequestPatient> requestPatients;
+    @ManyToOne
+    private User funder;
+
+    //this is the list of select patients to be funded
+    @OneToMany
+    private List<Patient> patients;
     @Column
     @CreationTimestamp
     private LocalDate createdAt;
