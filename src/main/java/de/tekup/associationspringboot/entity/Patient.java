@@ -6,7 +6,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,7 +24,8 @@ public class Patient {
     //amount needed
     private double fundingNeeded;
     @OneToMany
-    private List<RequestPatient> requestPatients;
+    public List<RequestPatient> requestPatients;
+
     @Column
     @CreationTimestamp
     private LocalDate createdAt;

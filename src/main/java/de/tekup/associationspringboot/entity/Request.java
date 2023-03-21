@@ -1,16 +1,21 @@
 package de.tekup.associationspringboot.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Data
-public class Request {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,14 +24,16 @@ public class Request {
 
     //amount requested by funder
     private double requestedAmount;
-    @OneToMany
-    private List<RequestPatient> requestPatients;
     @ManyToOne
     private User funder;
 
-    //this is the list of select patients to be funded
     @OneToMany
+    public List<RequestPatient> requestPatients;
+
+    //this is the list of selected patients
+    @Transient
     private List<Patient> patients;
+
     @Column
     @CreationTimestamp
     private LocalDate createdAt;
