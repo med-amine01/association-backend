@@ -2,6 +2,7 @@ package de.tekup.associationspringboot.service;
 
 import de.tekup.associationspringboot.entity.Patient;
 import de.tekup.associationspringboot.entity.Request;
+import de.tekup.associationspringboot.entity.RequestPatient;
 import de.tekup.associationspringboot.entity.RequestStatus;
 import de.tekup.associationspringboot.repository.RequestRepository;
 import lombok.AllArgsConstructor;
@@ -14,8 +15,8 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 public class RequestService {
     private RequestRepository requestRepository;
-    private RequestPatientService requestPatientService;
-    private PatientService patientService;
+
+
 
     public Request addRequest(Request request){
         request.setRequestStatus(RequestStatus.REVIEW);
@@ -62,23 +63,4 @@ public class RequestService {
         return null;
     }
 
-    public void splitAmountOnSelectedPatients(Request request){
-        if(request.getRequestedAmount() > 0){
-            double eachAmount = request.getRequestedAmount() / request.getPatients().size();
-
-            request.getPatients().forEach(patient -> {
-                requestPatientService.addRequestToPatient(request,patientService.getPatient(patient.getId()),eachAmount);
-                //substract that splitted amount from the amount patient funding needed
-                updateAmount(patient.getId(), eachAmount);
-            });
-        }
-    }
-
-    private void updateAmount(Long patientId, double amount){
-        Patient p = patientService.getPatient(patientId);
-        String val = String.format("%.2f",p.getFundingNeeded() - amount);
-        System.err.println(val);
-        p.setFundingNeeded(Double.parseDouble(val));
-        patientService.updatePatient(p);
-    }
 }

@@ -172,6 +172,8 @@ public class UserService {
         adminUser.setUserFirstName("Admin");
         adminUser.setUserLastName("Admin");
         adminUser.setUserPassword(getEncodedPassword("admin123"));
+        adminUser.setPhone("55123456");
+        adminUser.setAddress("1235 xyz 456 ");
         adminUser.setActive(true);
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(adminRole);
