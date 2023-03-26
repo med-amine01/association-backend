@@ -16,7 +16,6 @@ import java.util.List;
 public class RequestPatientService {
     private final RequestPatientRepository requestPatientRepository;
     private PatientService patientService;
-    private RequestService requestService;
 
     public void addRequestToPatient(Request request, Patient patient, double amount){
         requestPatientRepository.save(new RequestPatient(
@@ -27,29 +26,30 @@ public class RequestPatientService {
         ));
     }
 
+    public List<RequestPatient> getAllByRequest(Request request){
+        return requestPatientRepository.findAllByRequest(request);
+    }
+
 
     public void splitAmountOnSelectedPatients(Request request){
         if(request.getRequestedAmount() > 0){
             double eachAmount = request.getRequestedAmount() / request.getPatients().size();
-
+            String val = String.format("%.2f",eachAmount);
             request.getPatients().forEach(patient -> {
-                addRequestToPatient(request,patientService.getPatient(patient.getId()),eachAmount);
+                //patientService.getPatient(patient.getId())
+                addRequestToPatient(request,patient,Double.parseDouble(val));
                 //substract that splitted amount from the amount patient funding needed
-                //TODO : tanseech tarja3 w tverifi keen demande accepté w ela lee bech taaml soustraction
-                updateAmount(patient.getId(), eachAmount);
+                //patient.getId()
+                updateAmount(patient.getId(), Double.parseDouble(val));
             });
         }
     }
 
     private void updateAmount(Long patientId, double amount){
+        //TODO : thabet fi funding needed 9bal ma taaml substrction
         Patient p = patientService.getPatient(patientId);
         String val = String.format("%.2f",p.getFundingNeeded() - amount);
-        System.err.println(val);
         p.setFundingNeeded(Double.parseDouble(val));
         patientService.updatePatient(p);
-    }
-    public List<RequestPatient> getRpByRequest(Long id){
-        Request request = requestService.getRequest(id);
-        return new ArrayList<>(requestPatientRepository.findAllByRequest(request));
     }
 }

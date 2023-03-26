@@ -27,17 +27,15 @@ public class Request implements Serializable {
     @ManyToOne
     private User funder;
 
-    @OneToMany
-    public List<RequestPatient> requestPatients;
 
-    //this is the list of selected patients
-    @Transient
+    @OneToMany
+    private List<RequestPatient> requestPatients;
+
+    @OneToMany
     private List<Patient> patients;
 
-    @Column
     @CreationTimestamp
     private LocalDate createdAt;
-    @Column
     @UpdateTimestamp
     private LocalDate updatedAt;
 }

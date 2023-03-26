@@ -24,7 +24,7 @@ public class Patient {
     //amount needed
     private double fundingNeeded;
     @OneToMany
-    public List<RequestPatient> requestPatients;
+    private List<RequestPatient> requestPatients;
 
     @Column
     @CreationTimestamp
