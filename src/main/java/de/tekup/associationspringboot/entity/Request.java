@@ -3,6 +3,7 @@ package de.tekup.associationspringboot.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -27,7 +28,6 @@ public class Request implements Serializable {
     @ManyToOne
     private User funder;
 
-
     @OneToMany
     private List<RequestPatient> requestPatients;
 
@@ -35,6 +35,7 @@ public class Request implements Serializable {
     private List<Patient> patients;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDate createdAt;
     @UpdateTimestamp
     private LocalDate updatedAt;

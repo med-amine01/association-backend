@@ -46,10 +46,14 @@ public class RequestPatientService {
     }
 
     private void updateAmount(Long patientId, double amount){
-        //TODO : thabet fi funding needed 9bal ma taaml substrction
         Patient p = patientService.getPatient(patientId);
         String val = String.format("%.2f",p.getFundingNeeded() - amount);
-        p.setFundingNeeded(Double.parseDouble(val));
+        if(Double.parseDouble(val) <= 0){
+            p.setFundingNeeded(0);
+        }
+        else{
+            p.setFundingNeeded(Double.parseDouble(val));
+        }
         patientService.updatePatient(p);
     }
 }

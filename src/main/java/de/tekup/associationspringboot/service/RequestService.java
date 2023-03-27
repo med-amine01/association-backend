@@ -20,7 +20,6 @@ public class RequestService {
         return requestRepository.save(request);
     }
     public Request updateRequest(Request request){
-
         if(!requestRepository.existsById(request.getId())){
             throw new NoSuchElementException("No Request With ID: " + request.getId());
         }
@@ -48,10 +47,9 @@ public class RequestService {
         }
         return requestRepository.save(request);
     }
-    public Request removeRequest(Long reqId){
+    public void removeRequest(Long reqId){
         Request request = getRequest(reqId);
         requestRepository.delete(request);
-        return request;
     }
     public Request getRequest(Long id){
         return requestRepository.findById(id)

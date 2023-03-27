@@ -3,7 +3,10 @@ package de.tekup.associationspringboot.controller;
 import de.tekup.associationspringboot.entity.Request;
 import de.tekup.associationspringboot.service.RequestService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,8 +28,16 @@ public class RequestController {
     }
 
     @DeleteMapping("/delete/{reqId}")
-    public Request deleteRequest(@PathVariable("reqId") Long reqId){
-        return requestService.removeRequest(reqId);
+    public ResponseEntity<?> deleteRequest(@PathVariable("reqId") Long reqId){
+        try {
+            requestService.removeRequest(reqId);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e) {
+            //this exception will appear if you try to delete accepted requests
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR DELETING");
+        }
     }
 
     @GetMapping("/getAll")
