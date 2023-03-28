@@ -20,6 +20,12 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
+    public List<User> getUsersByRole(String role){
+        List<User> users = new ArrayList<>();
+        userRepository.findAllByRolesRoleName(role).forEach(users::add);
+        return users;
+    }
+
     public List<User> getAll(){
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
@@ -34,46 +40,6 @@ public class UserService {
         return userRepository.findUserByUuid(userUid);
     }
 
-//    @Transactional
-//    public User updateUser(User user, String oldEmail){
-//        User user1 = userRepository.findById(oldEmail).orElseThrow(()-> new NoSuchElementException("No user found"));
-//
-//        if(user.getUserEmail() == null){
-//
-//        }
-//        //if the new Email exists in data base
-//        if(!userRepository.existsById(user.getUserEmail())) {
-//
-//            if (!user.getRoles().isEmpty()) {
-//                try {
-//                    Set<Role> roleList = new HashSet<>();
-//                    user.getRoles().forEach(r -> {
-//                        roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
-//                    });
-//                }
-//                catch (Exception e){
-//                    System.out.println(e.getMessage());
-//                }
-//
-//            } else {
-//                //setting the same roles
-//                user.setRoles(user1.getRoles());
-//            }
-//
-//            if (user.getUserPassword() == null) {
-//                user.setUserPassword(getEncodedPassword(user1.getUserPassword()));
-//            } else {
-//                user.setUserPassword(getEncodedPassword(user.getUserPassword()));
-//            }
-//
-//            //checking if the user updates his email
-//            if (user.getUserEmail() != null) {
-//                userRepository.updateUserEmail(user.getUserEmail(), oldEmail);
-//            }
-//            return userRepository.save(user);
-//        }
-//        return null;
-//    }
 
     public User updateUser(User user, String uuid) {
 

@@ -20,6 +20,8 @@ public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String requestName;
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
 

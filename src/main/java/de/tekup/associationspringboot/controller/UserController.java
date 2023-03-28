@@ -17,6 +17,13 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+
+
+    @GetMapping("/getByRole/{role}")
+    public List<User> getbyRole(@PathVariable("role") String role){
+        return userService.getUsersByRole(role);
+    }
+
     @PostMapping("/addUser")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public User addUser(@RequestBody User user){
