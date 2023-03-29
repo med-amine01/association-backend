@@ -33,7 +33,7 @@ public class Request implements Serializable {
     @OneToMany
     private List<RequestPatient> requestPatients;
 
-    @OneToMany
+    @ManyToMany
     private List<Patient> patients;
 
     @CreationTimestamp

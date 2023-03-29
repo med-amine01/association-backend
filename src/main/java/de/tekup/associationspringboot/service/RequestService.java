@@ -24,27 +24,31 @@ public class RequestService {
             throw new NoSuchElementException("No Request With ID: " + request.getId());
         }
 
-        String status = request.getRequestStatus().toString();
-        if(status.startsWith("ACCEPTED")){
-            requestPatientService.splitAmountOnSelectedPatients(request);
 
-            if(status.equals("ACCEPTED_ADMIN"))
-                request.setRequestStatus(RequestStatus.ACCEPTED_ADMIN);
-            if(status.equals("ACCEPTED_CEO"))
-                request.setRequestStatus(RequestStatus.ACCEPTED_CEO);
-            if(status.equals("ACCEPTED_SG"))
-                request.setRequestStatus(RequestStatus.ACCEPTED_SG);
+        if(request.getRequestStatus() !=null){
+            String status = request.getRequestStatus().toString();
+            if(status.startsWith("ACCEPTED")){
+                requestPatientService.splitAmountOnSelectedPatients(request);
+
+                if(status.equals("ACCEPTED_ADMIN"))
+                    request.setRequestStatus(RequestStatus.ACCEPTED_ADMIN);
+                if(status.equals("ACCEPTED_CEO"))
+                    request.setRequestStatus(RequestStatus.ACCEPTED_CEO);
+                if(status.equals("ACCEPTED_SG"))
+                    request.setRequestStatus(RequestStatus.ACCEPTED_SG);
+            }
+            else{
+                if(status.equals("REFUSED_ADMIN"))
+                    request.setRequestStatus(RequestStatus.REFUSED_ADMIN);
+
+                if(status.equals("REFUSED_CEO"))
+                    request.setRequestStatus(RequestStatus.REFUSED_CEO);
+
+                if(status.equals("REFUSED_SG"))
+                    request.setRequestStatus(RequestStatus.REFUSED_SG);
+            }
         }
-        else{
-            if(status.equals("REFUSED_ADMIN"))
-                request.setRequestStatus(RequestStatus.REFUSED_ADMIN);
 
-            if(status.equals("REFUSED_CEO"))
-                request.setRequestStatus(RequestStatus.REFUSED_CEO);
-
-            if(status.equals("REFUSED_SG"))
-                request.setRequestStatus(RequestStatus.REFUSED_SG);
-        }
         return requestRepository.save(request);
     }
     public void removeRequest(Long reqId){
