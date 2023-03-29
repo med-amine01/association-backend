@@ -1,5 +1,7 @@
 package de.tekup.associationspringboot.service;
 
+import com.github.javafaker.Faker;
+import de.tekup.associationspringboot.entity.Patient;
 import de.tekup.associationspringboot.entity.Role;
 import de.tekup.associationspringboot.entity.User;
 import de.tekup.associationspringboot.repository.RoleRepository;
@@ -18,6 +20,8 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+
+
 
 
     public List<User> getUsersByRole(String role){
@@ -147,6 +151,30 @@ public class UserService {
         adminUser.setUuid(UUID.randomUUID().toString());
         adminUser.setRoles(adminRoles);
         userRepository.save(adminUser);
+
+        generateFunders(funderRole);
+    }
+
+    //GENERATING FAKE DATA FOR FUNDER
+    private void generateFunders(Role r){
+        Faker faker = new Faker();
+        List<User> funderList = new ArrayList<>();
+        for(int i=0; i<5; i++){
+            User u = new User();
+            u.setUserEmail(faker.name().firstName().toLowerCase()+"@test.com");
+            u.setUserFirstName(faker.name().firstName());
+            u.setUserLastName(faker.name().lastName());
+            u.setPhone(faker.phoneNumber().cellPhone());
+            u.setAddress(faker.address().fullAddress());
+            u.setUuid(UUID.randomUUID().toString());
+            u.setActive(true);
+            u.setUserPassword(getEncodedPassword("funder123"));
+            Set<Role> role = new HashSet<>();
+            role.add(r);
+            u.setRoles(role);
+            funderList.add(u);
+        }
+        userRepository.saveAll(funderList);
     }
 
     public String getEncodedPassword(String password){
