@@ -33,25 +33,27 @@ public class RequestPatientService {
     public void splitAmountOnSelectedPatients(Request request){
         if(request.getRequestedAmount() > 0){
             double eachAmount = request.getRequestedAmount() / request.getPatients().size();
-            String val = String.format("%.2f",eachAmount);
+
+
             request.getPatients().forEach(patient -> {
                 //patientService.getPatient(patient.getId())
-                addRequestToPatient(request,patient,Double.parseDouble(val));
+                addRequestToPatient(request,patient,Math.round(eachAmount));
                 //substract that splitted amount from the amount patient funding needed
                 //patient.getId()
-                updateAmount(patient.getId(), Double.parseDouble(val));
+                updateAmount(patient.getId(), Math.round(eachAmount));
             });
         }
     }
 
     private void updateAmount(Long patientId, double amount){
         Patient p = patientService.getPatient(patientId);
-        String val = String.format("%.2f",p.getFundingNeeded() - amount);
-        if(Double.parseDouble(val) <= 0){
+        //String val = String.format("%.2f",p.getFundingNeeded() - amount);
+        double val = Math.round(p.getFundingNeeded() - amount);
+        if(val <= 0){
             p.setFundingNeeded(0);
         }
         else{
-            p.setFundingNeeded(Double.parseDouble(val));
+            p.setFundingNeeded(val);
         }
         patientService.updatePatient(p);
     }

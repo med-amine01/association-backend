@@ -1,17 +1,14 @@
 package de.tekup.associationspringboot.service;
 
 import com.github.javafaker.Faker;
-import de.tekup.associationspringboot.entity.Patient;
 import de.tekup.associationspringboot.entity.Role;
 import de.tekup.associationspringboot.entity.User;
 import de.tekup.associationspringboot.repository.RoleRepository;
 import de.tekup.associationspringboot.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -62,9 +59,7 @@ public class UserService {
         }
         if(!user.getRoles().isEmpty()){
             Set<Role> roleList = new HashSet<>();
-            user.getRoles().forEach(r -> {
-                roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
-            });
+            user.getRoles().forEach(r -> roleList.add(roleRepository.findById(r.getRoleName()).orElse(null)));
 
             if(!roleList.isEmpty()){
                 current.setRoles(roleList);
@@ -85,9 +80,7 @@ public class UserService {
         //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
         if(!userRepository.existsById(user.getUserEmail())){
             Set<Role> roleList = new HashSet<>();
-            user.getRoles().forEach(r -> {
-                roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
-            });
+            user.getRoles().forEach(r -> roleList.add(roleRepository.findById(r.getRoleName()).orElse(null)));
 
             if(!roleList.isEmpty()){
                 user.setRoles(roleList);
@@ -141,7 +134,7 @@ public class UserService {
         adminUser.setUserEmail("admin@test.com");
         adminUser.setUserFirstName("Admin");
         adminUser.setUserLastName("Admin");
-        adminUser.setUserPassword(getEncodedPassword("admin123"));
+            adminUser.setUserPassword(getEncodedPassword("admin123"));
         adminUser.setPhone("55123456");
         adminUser.setAddress("1235 xyz 456 ");
         adminUser.setActive(true);
