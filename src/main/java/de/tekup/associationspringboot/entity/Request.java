@@ -25,6 +25,9 @@ public class Request implements Serializable {
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
 
+    @Enumerated(EnumType.STRING)
+    private RequestStatus requestToFunderStatus;
+
     //amount requested by funder
     private double requestedAmount;
     @ManyToOne
@@ -35,6 +38,13 @@ public class Request implements Serializable {
 
     @ManyToMany
     private List<Patient> patients;
+
+
+    //PROJECT
+    @OneToMany
+    private List<RequestProject> requestProjects;
+    @ManyToMany
+    private List<Project> projects;
 
     @CreationTimestamp
     @Column(updatable = false)

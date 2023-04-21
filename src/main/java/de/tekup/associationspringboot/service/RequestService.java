@@ -15,8 +15,14 @@ public class RequestService {
     private RequestRepository requestRepository;
     private RequestPatientService requestPatientService;
 
-    public Request addRequest(Request request){
-        request.setRequestStatus(RequestStatus.REVIEW);
+    public Request addRequest(Request request) {
+        if (request.getProjects() != null) {
+            request.setRequestToFunderStatus(RequestStatus.PENDING);
+        }
+
+        if (request.getPatients() != null) {
+            request.setRequestStatus(RequestStatus.REVIEW);
+        }
         return requestRepository.save(request);
     }
     public Request updateRequest(Request request){
@@ -30,6 +36,8 @@ public class RequestService {
             if(status.startsWith("ACCEPTED")){
                 requestPatientService.splitAmountOnSelectedPatients(request);
 
+                //TODO : lina tnajem to3erdhna mochkela puisque user ynajem ykoun 3andou akther men role
+                //TODO : arje3 w badel logique bech ma yssirech confusion fi role
                 if(status.equals("ACCEPTED_ADMIN"))
                     request.setRequestStatus(RequestStatus.ACCEPTED_ADMIN);
                 if(status.equals("ACCEPTED_CEO"))
