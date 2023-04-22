@@ -5,7 +5,6 @@ import de.tekup.associationspringboot.entity.JwtResponse;
 import de.tekup.associationspringboot.entity.User;
 import de.tekup.associationspringboot.repository.UserRepository;
 import de.tekup.associationspringboot.util.JwtUtil;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

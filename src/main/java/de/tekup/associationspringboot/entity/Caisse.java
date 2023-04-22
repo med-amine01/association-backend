@@ -1,7 +1,6 @@
 package de.tekup.associationspringboot.entity;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;

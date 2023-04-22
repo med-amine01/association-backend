@@ -13,4 +13,5 @@ import java.util.List;
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
     List<Request> findRequestByRequestStatus(RequestStatus status);
+    List<Request> findRequestByRequestToFunderStatus(RequestStatus status);
 }

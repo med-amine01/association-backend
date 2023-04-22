@@ -4,7 +4,6 @@ import de.tekup.associationspringboot.entity.User;
 import de.tekup.associationspringboot.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 

@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,6 +21,10 @@ public class Project {
     private double estimatedBudget;
     private double totalAmountSpent;
     private String duration;
+
+    @OneToMany
+    private List<RequestProject> requestProjects;
+
     @Column
     @CreationTimestamp
     private LocalDate createdAt;

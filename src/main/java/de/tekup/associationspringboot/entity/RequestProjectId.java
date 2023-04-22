@@ -12,11 +12,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestPatientId implements Serializable {
-
+public class RequestProjectId implements Serializable {
     @Column(name = "request_id")
     private Long requestId;
-    @Column(name = "patient_id")
-    private Long patientId;
 
+    @Column(name = "project_id")
+    private Long projectId;
 }

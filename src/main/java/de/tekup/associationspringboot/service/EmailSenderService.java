@@ -2,11 +2,13 @@ package de.tekup.associationspringboot.service;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Service
 public class EmailSenderService {
     private JavaMailSender javaMailSender;

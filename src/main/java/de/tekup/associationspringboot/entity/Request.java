@@ -3,7 +3,6 @@ package de.tekup.associationspringboot.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -25,16 +24,24 @@ public class Request implements Serializable {
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
 
+    @Enumerated(EnumType.STRING)
+    private RequestStatus requestToFunderStatus;
+
     //amount requested by funder
     private double requestedAmount;
     @ManyToOne
     private User funder;
 
-    @OneToMany
-    private List<RequestPatient> requestPatients;
 
     @ManyToMany
     private List<Patient> patients;
+
+
+    //PROJECT
+    @OneToMany
+    private List<RequestProject> requestProjects;
+    @ManyToMany
+    private List<Project> projects;
 
     @CreationTimestamp
     @Column(updatable = false)
