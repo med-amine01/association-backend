@@ -1,7 +1,6 @@
 package de.tekup.associationspringboot.service;
 
 import com.github.javafaker.Faker;
-import de.tekup.associationspringboot.entity.Patient;
 import de.tekup.associationspringboot.entity.Project;
 import de.tekup.associationspringboot.repository.ProjectRepository;
 import lombok.AllArgsConstructor;

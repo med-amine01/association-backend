@@ -1,11 +1,12 @@
 package de.tekup.associationspringboot.service;
 
-import de.tekup.associationspringboot.entity.*;
+import de.tekup.associationspringboot.entity.Project;
+import de.tekup.associationspringboot.entity.Request;
+import de.tekup.associationspringboot.entity.RequestProject;
+import de.tekup.associationspringboot.entity.RequestProjectId;
 import de.tekup.associationspringboot.repository.RequestProjectRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
