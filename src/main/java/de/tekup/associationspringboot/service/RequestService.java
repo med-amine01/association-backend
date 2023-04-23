@@ -1,7 +1,7 @@
 package de.tekup.associationspringboot.service;
 
 import de.tekup.associationspringboot.entity.Request;
-import de.tekup.associationspringboot.entity.RequestStatus;
+import de.tekup.associationspringboot.enums.RequestStatus;
 import de.tekup.associationspringboot.repository.RequestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
