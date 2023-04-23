@@ -24,6 +24,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Request> requests;
+
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     //this will create third table called USER_ROLE with two columns =>  USER_ID ; ROLE_ID
     @JoinTable(
