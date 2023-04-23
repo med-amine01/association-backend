@@ -17,7 +17,7 @@ public class RequestService {
 
     public Request addRequest(Request request) {
         if (request.getProjects() != null) {
-            request.setRequestToFunderStatus(RequestStatus.PENDING);
+            request.setRequestToFunderStatus(RequestStatus.REQUEST_PENDING);
         }
         request.setRequestStatus(RequestStatus.REVIEW);
 
@@ -130,8 +130,11 @@ public class RequestService {
 
 
         //funder
-        if(status.equals("PENDING")){
-            return RequestStatus.PENDING;
+        if(status.equals("REQUEST_PENDING")){
+            return RequestStatus.REQUEST_PENDING;
+        }
+        if(status.equals("REQUEST_CANCELED")){
+            return RequestStatus.REQUEST_CANCELED;
         }
         if(status.equals("REQUEST_ACCEPTED")){
             return RequestStatus.REQUEST_ACCEPTED;

@@ -9,7 +9,8 @@ public enum RequestStatus {
     REFUSED_CEO,
     ACCEPTED_SG,
     REFUSED_SG,
-    PENDING,
+    REQUEST_PENDING,
+    REQUEST_CANCELED,
     REQUEST_ACCEPTED,
     REQUEST_REFUSED
 }
