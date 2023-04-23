@@ -73,7 +73,11 @@ public class UserService {
     if(!userRepository.existsById(userEmail)){
         throw new NoSuchElementException("No user found");
     }
-    userRepository.deleteById(userEmail);
+
+    //NOTE : Always set the sub childs to null to remove relationships in database then delete the object
+    User user = userRepository.findById(userEmail).get();
+    user.setRoles(null);
+    userRepository.delete(user);
 }
 
     public User registerNewUser(User user){
