@@ -3,6 +3,7 @@ package de.tekup.associationspringboot.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,4 +32,11 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")}
     )
     private Set<Role> roles;
+
+    @OneToMany
+    private List<TransactionHistory> transactionHistories;
+
+    @ManyToMany
+    private List<Account> account;
+
 }

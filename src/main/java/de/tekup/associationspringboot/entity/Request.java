@@ -1,5 +1,6 @@
 package de.tekup.associationspringboot.entity;
 
+import de.tekup.associationspringboot.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,13 +30,12 @@ public class Request implements Serializable {
 
     //amount requested by funder
     private double requestedAmount;
+
     @ManyToOne
     private User funder;
 
-
     @ManyToMany
     private List<Patient> patients;
-
 
     //PROJECT
     @OneToMany

@@ -1,14 +1,17 @@
 package de.tekup.associationspringboot.service;
 
 import com.github.javafaker.Faker;
+import de.tekup.associationspringboot.entity.Account;
 import de.tekup.associationspringboot.entity.Role;
 import de.tekup.associationspringboot.entity.User;
+import de.tekup.associationspringboot.repository.AccountRepository;
 import de.tekup.associationspringboot.repository.RoleRepository;
 import de.tekup.associationspringboot.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PostPersist;
 import java.util.*;
 
 @Service
@@ -17,7 +20,7 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-
+    private AccountRepository accountRepository;
 
 
 
@@ -80,7 +83,26 @@ public class UserService {
         //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
         if(!userRepository.existsById(user.getUserEmail())){
             Set<Role> roleList = new HashSet<>();
-            user.getRoles().forEach(r -> roleList.add(roleRepository.findById(r.getRoleName()).orElse(null)));
+            user.getRoles().forEach(r -> {
+                roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
+
+                //setting account
+                if(r.getRoleName().equals("ROLE_FUNDER")) {
+                    Account acc = new Account();
+                    acc.setCurrentBalance(0);
+                    acc.setTotalBalance(0);
+                    acc.setTransactionHistories(null);
+                    accountRepository.save(acc);
+                    if(user.getAccount() != null) {
+                        user.getAccount().add(acc);
+                    }
+                    else {
+                        List<Account> tempListAccount = new ArrayList<>();
+                        tempListAccount.add(acc);
+                        user.setAccount(tempListAccount);
+                    }
+                }
+            });
 
             if(!roleList.isEmpty()){
                 user.setRoles(roleList);
@@ -89,6 +111,8 @@ public class UserService {
             //setting uuid to the user
             user.setUuid(UUID.randomUUID().toString());
             user.setActive(false);
+
+
             return userRepository.save(user);
         }
         return null;
@@ -152,7 +176,7 @@ public class UserService {
     private void generateFunders(Role r){
         Faker faker = new Faker();
         List<User> funderList = new ArrayList<>();
-        for(int i=0; i<5; i++){
+        for(int i=0; i<3; i++){
             User u = new User();
             u.setUserEmail(faker.name().firstName().toLowerCase()+"@test.com");
             u.setUserFirstName(faker.name().firstName());
@@ -166,6 +190,14 @@ public class UserService {
             role.add(r);
             u.setRoles(role);
             funderList.add(u);
+
+            u.setAccount(new ArrayList<>());
+            Account acc = new Account();
+            acc.setCurrentBalance(0);
+            acc.setTotalBalance(0);
+            acc.setTransactionHistories(null);
+            accountRepository.save(acc);
+            u.getAccount().add(acc);
         }
         userRepository.saveAll(funderList);
     }

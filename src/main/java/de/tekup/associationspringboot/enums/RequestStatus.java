@@ -1,4 +1,4 @@
-package de.tekup.associationspringboot.entity;
+package de.tekup.associationspringboot.enums;
 
 public enum RequestStatus {
     REVIEW,
