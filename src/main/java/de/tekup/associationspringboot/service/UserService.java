@@ -94,6 +94,7 @@ public class UserService {
                     Account acc = new Account();
                     acc.setCurrentBalance(0);
                     acc.setTotalBalance(0);
+                    acc.setFunder(user);
                     acc.setTransactionHistories(null);
                     accountRepository.save(acc);
                     if(user.getAccount() != null) {
@@ -178,7 +179,6 @@ public class UserService {
     //GENERATING FAKE DATA FOR FUNDER
     private void generateFunders(Role r){
         Faker faker = new Faker();
-        List<User> funderList = new ArrayList<>();
         for(int i=0; i<3; i++){
             User u = new User();
             u.setUserEmail(faker.name().firstName().toLowerCase()+"@test.com");
@@ -192,17 +192,15 @@ public class UserService {
             Set<Role> role = new HashSet<>();
             role.add(r);
             u.setRoles(role);
-            funderList.add(u);
+            userRepository.save(u);
 
-            u.setAccount(new ArrayList<>());
             Account acc = new Account();
             acc.setCurrentBalance(0);
             acc.setTotalBalance(0);
             acc.setTransactionHistories(null);
+            acc.setFunder(u);
             accountRepository.save(acc);
-            u.getAccount().add(acc);
         }
-        userRepository.saveAll(funderList);
     }
 
     public String getEncodedPassword(String password){
