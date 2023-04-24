@@ -18,6 +18,12 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private User funder;
+
+    @OneToMany
+    private List<TransactionHistory> transactionHistories;
+
     //solde courant
     private double currentBalance;
 
@@ -27,8 +33,4 @@ public class Account {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDate createdAt;
-
-    @OneToMany
-    private List<TransactionHistory> transactionHistories;
-
 }

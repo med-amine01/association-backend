@@ -35,9 +35,6 @@ public class User {
     private Set<Role> roles;
 
     @OneToMany
-    private List<TransactionHistory> transactionHistories;
-
-    @ManyToMany
     private List<Account> account;
 
 }
