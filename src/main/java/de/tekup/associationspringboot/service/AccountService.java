@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +19,17 @@ public class AccountService {
     private AccountRepository accountRepository;
     private TransactionHistoryRepository historyRepository;
 
+    public Account getAccount(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("No account with ID " +id));
+    }
+
+    public List<Account> getAllAccounts() {
+        return new ArrayList<>(accountRepository.findAll());
+    }
+
+
+    //ajouter fi solde
     public void Deposit(Account account, double amount) {
         List<TransactionHistory> thList;
         thList = historyRepository.findAllByAccount_Id(account.getId());
@@ -42,6 +54,7 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    //retirer de solde
     public void withdraw(Account account, double amount) {
         List<TransactionHistory> thList = new ArrayList<>();
         Account acc = accountRepository.findById(account.getId()).get();

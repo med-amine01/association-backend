@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.PostPersist;
 import java.util.*;
 
 @Service
@@ -96,6 +95,7 @@ public class UserService {
                     acc.setTotalBalance(0);
                     acc.setFunder(user);
                     acc.setTransactionHistories(null);
+                    acc.setEnable(true);
                     accountRepository.save(acc);
                     if(user.getAccount() != null) {
                         user.getAccount().add(acc);
@@ -199,6 +199,7 @@ public class UserService {
             acc.setTotalBalance(0);
             acc.setTransactionHistories(null);
             acc.setFunder(u);
+            acc.setEnable(true);
             accountRepository.save(acc);
         }
     }

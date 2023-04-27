@@ -3,10 +3,9 @@ package de.tekup.associationspringboot.controller;
 import de.tekup.associationspringboot.entity.Account;
 import de.tekup.associationspringboot.service.AccountService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/account")
@@ -14,6 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class AccountController {
     private AccountService accountService;
+
+    @GetMapping("/getall")
+    public List<Account> getAll() {
+        return accountService.getAllAccounts();
+    }
+    @GetMapping("/{id}")
+    public Account getAccountById(@PathVariable("id") Long id) {
+        return accountService.getAccount(id);
+    }
 
     @PostMapping("/deposit")
     public void depositMoney(@RequestBody Account account) {
