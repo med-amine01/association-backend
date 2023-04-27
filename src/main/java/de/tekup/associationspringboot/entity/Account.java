@@ -30,6 +30,8 @@ public class Account {
     //solde totale
     private double totalBalance;
 
+    private boolean enable;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDate createdAt;

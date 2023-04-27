@@ -1,6 +1,5 @@
 package de.tekup.associationspringboot.repository;
 
-import de.tekup.associationspringboot.entity.Account;
 import de.tekup.associationspringboot.entity.TransactionHistory;
 import de.tekup.associationspringboot.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
