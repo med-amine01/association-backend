@@ -1,5 +1,6 @@
 package de.tekup.associationspringboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.tekup.associationspringboot.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class TransactionHistory {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
+    @JsonIgnore
     @ManyToOne
     private Account account;
 
