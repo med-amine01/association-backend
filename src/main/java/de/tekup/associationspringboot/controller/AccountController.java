@@ -26,7 +26,7 @@ public class AccountController {
     @PostMapping("/deposit")
     public void depositMoney(@RequestBody Account account) {
         double amount = account.getTransactionHistories().get(0).getAmount();
-        accountService.Deposit(account,amount);
+        accountService.deposit(account,amount);
     }
 
     @PostMapping("/withdraw")

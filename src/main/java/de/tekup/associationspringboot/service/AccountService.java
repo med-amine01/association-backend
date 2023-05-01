@@ -30,7 +30,7 @@ public class AccountService {
 
 
     //ajouter fi solde
-    public void Deposit(Account account, double amount) {
+    public void deposit(Account account, double amount) {
         List<TransactionHistory> thList;
         thList = historyRepository.findAllByAccount_Id(account.getId());
 
