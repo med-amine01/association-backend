@@ -19,44 +19,48 @@ public class UserController {
 
 
     @GetMapping("/getByRole/{role}")
-    public List<User> getbyRole(@PathVariable("role") String role){
+    public List<User> getbyRole(@PathVariable("role") String role) {
         return userService.getUsersByRole(role);
     }
 
     @PostMapping("/addUser")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public User addUser(@RequestBody User user){
-        if(userService.registerNewUser(user) == null){
+    public User addUser(@RequestBody User user) {
+        if(userService.registerNewUser(user) == null) {
             throw new ResponseStatusException(HttpStatus.FOUND, "User Already Exists");
         }
         return  userService.registerNewUser(user);
     }
 
     @GetMapping("/{uuid}")
-    public User getUser(@PathVariable("uuid") String userUid){
+    public User getUser(@PathVariable("uuid") String userUid) {
         if(userService.getUser(userUid) == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
         return userService.getUser(userUid);
     }
     @GetMapping("/getall")
-    public List<User> getAll(){
+    public List<User> getAll() {
         return userService.getAll();
     }
 
     @PatchMapping("/update/{uuid}")
-    public User updatePatient(@RequestBody User user, @PathVariable String uuid){
-        if(userService.updateUser(user, uuid) == null){
+    public User updateUser(@RequestBody User user, @PathVariable String uuid){
+        if(userService.updateUser(user, uuid) == null) {
             throw new ResponseStatusException(HttpStatus.FOUND, "User Email already exists");
         }
         return userService.updateUser(user,uuid);
     }
 
-    @DeleteMapping("/delete/{userEmail}")
-    public void deletePatient(@PathVariable String userEmail){
-        userService.deleteUser(userEmail);
+    @DeleteMapping("/disable/{uuid}")
+    public User disableUser(@PathVariable String uuid) {
+        return userService.disableUser(uuid);
     }
 
+    @PatchMapping("/enable/{uuid}")
+    public User enableUser(@PathVariable String uuid) {
+        return userService.enableUser(uuid);
+    }
 
     //this methode will be executed after the application is built
     @PostConstruct
