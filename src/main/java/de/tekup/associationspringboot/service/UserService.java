@@ -24,22 +24,14 @@ public class UserService {
 
 
     public List<User> getUsersByRole(String role){
-        List<User> users = new ArrayList<>();
-        userRepository.findAllByRolesRoleName(role).forEach(users::add);
-        return users;
+        return new ArrayList<>(userRepository.findAllByRolesRoleName(role));
     }
 
     public List<User> getAll(){
-        List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
+        return new ArrayList<>(userRepository.findAll());
     }
 
     public User getUser(String userUid){
-        User u = userRepository.findUserByUuid(userUid);
-        if(u == null){
-            return null;
-        }
         return userRepository.findUserByUuid(userUid);
     }
 
@@ -71,17 +63,50 @@ public class UserService {
         return userRepository.save(current);
     }
 
-    public void deleteUser(String userEmail){
-    if(!userRepository.existsById(userEmail)){
-        throw new NoSuchElementException("No user found");
-    }
+
+    //DEPRECATED
+    /*public void deleteUser(String userEmail) {
+        if(!userRepository.existsById(userEmail)){
+            throw new NoSuchElementException("No user found");
+        }
         //NOTE : Always set the sub childs to null to remove relationships in database then delete the object
         User user = userRepository.findById(userEmail).get();
         user.setRoles(null);
+        //user.setAccount(null);
+        user.setAccount(null);
         userRepository.delete(user);
-}
+    }*/
 
-    public User registerNewUser(User user){
+    public User disableUser(String uuid) {
+        User user = userRepository.findUserByUuid(uuid);
+        if(user == null) {
+            throw new NoSuchElementException("No such user found");
+        }
+
+
+        user.getAccount().forEach(account -> {
+            account.setEnable(false);
+        });
+
+        user.setActive(false);
+        return userRepository.save(user);
+    }
+
+    public User enableUser(String uuid) {
+        User user = userRepository.findUserByUuid(uuid);
+        if(user == null) {
+            throw new NoSuchElementException("No such user found");
+        }
+
+        user.setActive(true);
+        user.getAccount().forEach(account -> {
+            account.setEnable(true);
+        });
+
+        return userRepository.save(user);
+    }
+
+    public User registerNewUser(User user) {
         //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
         if(!userRepository.existsById(user.getUserEmail())){
             Set<Role> roleList = new HashSet<>();
@@ -181,8 +206,9 @@ public class UserService {
         Faker faker = new Faker();
         for(int i=0; i<3; i++){
             User u = new User();
-            u.setUserEmail(faker.name().firstName().toLowerCase()+"@test.com");
-            u.setUserFirstName(faker.name().firstName());
+            String name = faker.name().firstName();
+            u.setUserEmail(name.toLowerCase()+"@test.com");
+            u.setUserFirstName(name);
             u.setUserLastName(faker.name().lastName());
             u.setPhone(faker.phoneNumber().cellPhone());
             u.setAddress(faker.address().fullAddress());

@@ -33,7 +33,9 @@ public class User {
     )
     private Set<Role> roles;
 
-    @OneToMany
+    //make sure that mappedBy in the other entity has the same name
+    //cuz if you don't set it with the same name you will get the return list empty
+    @OneToMany(mappedBy ="funder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Account> account;
 
 }
