@@ -23,8 +23,8 @@ public class UserService {
 
 
 
-    public List<User> getUsersByRole(String role){
-        return new ArrayList<>(userRepository.findAllByRolesRoleName(role));
+    public List<User> getUsersByCriteria(String role, boolean active) {
+        return new ArrayList<>(userRepository.findAllByRolesRoleNameAndActive(role,active));
     }
 
     public List<User> getAll(){
@@ -82,7 +82,6 @@ public class UserService {
         if(user == null) {
             throw new NoSuchElementException("No such user found");
         }
-
 
         user.getAccount().forEach(account -> {
             account.setEnable(false);

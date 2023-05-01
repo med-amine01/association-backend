@@ -18,9 +18,12 @@ public class UserController {
     private UserService userService;
 
 
-    @GetMapping("/getByRole/{role}")
-    public List<User> getbyRole(@PathVariable("role") String role) {
-        return userService.getUsersByRole(role);
+    @GetMapping("/getBy/{role}/{active}")
+    public List<User> getByCriteria(@PathVariable("role") String role , @PathVariable("active") String active) {
+        if(active.equals("1")) {
+            return userService.getUsersByCriteria(role,true);
+        }
+        return userService.getUsersByCriteria(role,false);
     }
 
     @PostMapping("/addUser")
