@@ -63,6 +63,10 @@ public class UserService {
         return userRepository.save(current);
     }
 
+    public User getUserByAccountId(Long accountId) {
+        return userRepository.findByAccountId(accountId);
+    }
+
 
     //DEPRECATED
     /*public void deleteUser(String userEmail) {

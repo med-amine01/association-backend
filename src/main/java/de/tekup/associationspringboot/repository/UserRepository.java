@@ -2,6 +2,8 @@ package de.tekup.associationspringboot.repository;
 
 import de.tekup.associationspringboot.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -20,5 +22,8 @@ public interface UserRepository extends JpaRepository<User,String> {
     List<User> findAllByRolesRoleName(String roleName);
 
     List<User> findAllByRolesRoleNameAndActive(String roleName, Boolean active);
+
+    @Query("SELECT u FROM User u INNER JOIN u.account a WHERE a.id = :accountId")
+    User findByAccountId(@Param("accountId") Long accountId);
 
 }

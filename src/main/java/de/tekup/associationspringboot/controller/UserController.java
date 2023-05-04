@@ -18,6 +18,11 @@ public class UserController {
     private UserService userService;
 
 
+    @GetMapping("/account/{id}")
+    public User getUserByAccountId(@PathVariable("id") Long accountId) {
+        return userService.getUserByAccountId(accountId);
+    }
+
     @GetMapping("/getBy/{role}/{active}")
     public List<User> getByCriteria(@PathVariable("role") String role , @PathVariable("active") String active) {
         if(active.equals("1")) {
