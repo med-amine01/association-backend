@@ -12,10 +12,12 @@ import java.util.NoSuchElementException;
 public class CaisseService {
     private CaisseRepository caisseRepository;
     public Caisse getCaisse (){
-        return caisseRepository.findById(1L)
-                                .orElseThrow(()-> new NoSuchElementException("Caisse Not Found " ));
-
+        if(!caisseRepository.existsById(1L)) {
+            return caisseRepository.save(Caisse.getInstance());
+        }
+        return caisseRepository.findById(1L).get();
     }
+
     public Caisse retirer(double amount){
         Caisse c=caisseRepository.findById(1L)
                 .orElseThrow(()-> new NoSuchElementException("Caisse Not Found " ));
