@@ -15,7 +15,9 @@ public class CaisseController {
     }
     @PostMapping("/Addsolde")
     public Double AjouterSolde(@RequestBody Double amount){
+        if (amount>0){
          caisseService.Ajouter(amount);
+        }
          return caisseService.getCaisse().getSolde();
     }
     @PostMapping ("/retiresolde")
