@@ -15,9 +15,11 @@ public class Caisse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double amount;
-    private static final Caisse instance=new Caisse();
+    private static final   Caisse instance=new Caisse();
 
-
+    public Long getId() {
+        return id;
+    }
 
     //badelt hnee
     public static Caisse getInstance() {
@@ -29,7 +31,8 @@ public class Caisse {
     }
 
     public synchronized void retirer(double montant) {
-        amount -= montant;
+        if (montant<this.amount){
+        amount -= montant;}
     }
 
     public synchronized double getSolde() {
