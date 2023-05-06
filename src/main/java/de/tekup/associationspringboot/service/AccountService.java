@@ -19,6 +19,7 @@ public class AccountService {
     private AccountRepository accountRepository;
     private TransactionHistoryRepository historyRepository;
 
+
     public Account getAccount(Long id) {
         return accountRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No account with ID " +id));
@@ -31,54 +32,40 @@ public class AccountService {
 
     //ajouter fi solde
     public void deposit(Account account, double amount) {
-        List<TransactionHistory> thList;
-        thList = historyRepository.findAllByAccount_Id(account.getId());
+        Account fetchedAccount = getAccount(account.getId());
+        double newCurrentBalance = fetchedAccount.getCurrentBalance() + amount;
+        double newTotalBalance = fetchedAccount.getCurrentBalance() + amount;
 
-        double money = 0;
-        for(int i=0; i<thList.size(); i++) {
-            money += thList.get(i).getAmount();
-        }
-        money += amount;
-        account.setCurrentBalance(money);
-        account.setTotalBalance(money);
+        fetchedAccount.setCurrentBalance(newCurrentBalance);
+        fetchedAccount.setTotalBalance(newTotalBalance);
 
         TransactionHistory th = new TransactionHistory();
-        th.setAccount(account);
+        th.setAccount(fetchedAccount);
         th.setAmount(amount);
         th.setTransactionType(TransactionType.DEPOSIT);
-        thList.add(th);
 
+        //add transaction history to targeted account
+        fetchedAccount.getTransactionHistories().add(th);
         historyRepository.save(th);
-        account.setTransactionHistories(thList);
 
-        accountRepository.save(account);
+        accountRepository.save(fetchedAccount);
     }
 
     //retirer de solde
     public void withdraw(Account account, double amount) {
-        List<TransactionHistory> thList = new ArrayList<>();
-        Account acc = accountRepository.findById(account.getId()).get();
+        Account fetchedAccount = getAccount(account.getId());
+        double newCurrentBalance = fetchedAccount.getCurrentBalance() - amount;
 
-        double money = acc.getCurrentBalance() - amount;
-        account.setCurrentBalance(money);
-
-        double total = 0;
-        List<TransactionHistory> depositTypeTransactions = historyRepository.findAllByTransactionType(TransactionType.DEPOSIT);
-        for(int i=0; i<depositTypeTransactions.size(); i++) {
-            total += depositTypeTransactions.get(i).getAmount();
-        }
-        account.setTotalBalance(Math.round(total));
+        fetchedAccount.setCurrentBalance(newCurrentBalance);
 
         TransactionHistory th = new TransactionHistory();
-        th.setAccount(account);
+        th.setAccount(fetchedAccount);
         th.setAmount(amount);
         th.setTransactionType(TransactionType.WITHDRAWAL);
-        thList.add(th);
-
+        fetchedAccount.getTransactionHistories().add(th);
         historyRepository.save(th);
-        account.setTransactionHistories(thList);
 
-        accountRepository.save(account);
+        accountRepository.save(fetchedAccount);
     }
 
 }
