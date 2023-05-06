@@ -17,6 +17,9 @@ public class Caisse {
     private double amount;
     private static final Caisse instance=new Caisse();
 
+
+
+    //badelt hnee
     public static Caisse getInstance() {
         return instance;
     }
