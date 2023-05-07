@@ -262,25 +262,7 @@ public class UserService {
 
     private void generateUsers() {
         Faker faker = new Faker();
-        //generate CEO
-        for(int i=0; i<2; i++) {
-            User u = new User();
-            String name = faker.name().firstName();
-            u.setUserEmail(name.toLowerCase()+"@test.com");
-            u.setUserFirstName(name);
-            u.setUserLastName(faker.name().lastName());
-            u.setPhone(faker.phoneNumber().cellPhone());
-            u.setAddress(faker.address().fullAddress());
-            u.setUuid(UUID.randomUUID().toString());
-            u.setActive(true);
-            u.setUserPassword(getEncodedPassword("ceo123"));
-            Set<Role> role = new HashSet<>();
-            role.add(roleRepository.findById("ROLE_CEO").get());
-            u.setRoles(role);
-            u.setAccount(null);
-            userRepository.save(u);
-        }
-
+        
         //generate worker
         for(int i=0; i<2; i++) {
             User u = new User();
