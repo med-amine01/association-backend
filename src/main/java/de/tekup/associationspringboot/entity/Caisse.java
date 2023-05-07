@@ -15,7 +15,7 @@ public class Caisse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double amount;
-    private static final   Caisse instance=new Caisse();
+    private static final    Caisse instance=new Caisse();
 
     public Long getId() {
         return id;

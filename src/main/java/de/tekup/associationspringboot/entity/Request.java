@@ -34,8 +34,8 @@ public class Request implements Serializable {
     @ManyToOne
     private User funder;
 
-    @ManyToMany
-    private List<Patient> patient;
+    @ManyToOne
+    private Patient patient;
 
     //PROJECT
     @OneToMany
