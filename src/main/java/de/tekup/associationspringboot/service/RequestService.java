@@ -55,9 +55,6 @@ public class RequestService {
                 if(status.equals("REFUSED_ADMIN"))
                     request.setRequestStatus(RequestStatus.REFUSED_ADMIN);
 
-                if(status.equals("REFUSED_CEO"))
-                    request.setRequestStatus(RequestStatus.REFUSED_CEO);
-
                 if(status.equals("REFUSED_SG"))
                     request.setRequestStatus(RequestStatus.REFUSED_SG);
 
@@ -109,14 +106,8 @@ public class RequestService {
         if(status.equals("REFUSED_ADMIN")){
             return RequestStatus.REFUSED_ADMIN;
         }
-
-
-        //CEO
         if(status.equals("ACCEPTED_TO_SG")){
             return RequestStatus.ACCEPTED_TO_SG;
-        }
-        if(status.equals("REFUSED_CEO")){
-            return RequestStatus.REFUSED_CEO;
         }
 
 
