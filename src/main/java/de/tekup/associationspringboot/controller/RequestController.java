@@ -55,4 +55,9 @@ public class RequestController {
     public List<Request> reviewRequests(@PathVariable("status") String status){
         return requestService.getRequestByStatus(status);
     }
+
+    @GetMapping("/funder/{uid}")
+    public List<Request> getByUid(@PathVariable("uid")String uid) {
+        return requestService.getRequestsByFunderUid(uid);
+    }
 }
