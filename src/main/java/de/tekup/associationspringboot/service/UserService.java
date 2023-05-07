@@ -109,6 +109,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User getUserByEmail(String email) {
+        return userRepository.findById(email)
+                .orElseThrow(()-> new NoSuchElementException("No User with Email : " + email));
+    }
+
     public User registerNewUser(User user) {
         //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
         if(!userRepository.existsById(user.getUserEmail())){

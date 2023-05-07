@@ -1,6 +1,7 @@
 package de.tekup.associationspringboot.service;
 
 import de.tekup.associationspringboot.entity.Request;
+import de.tekup.associationspringboot.entity.User;
 import de.tekup.associationspringboot.enums.RequestStatus;
 import de.tekup.associationspringboot.repository.RequestRepository;
 import lombok.AllArgsConstructor;
@@ -14,13 +15,21 @@ import java.util.NoSuchElementException;
 public class RequestService {
     private RequestRepository requestRepository;
     private RequestProjectService requestProjectService;
+    private AccountService accountService;
+    private UserService userService;
+
+
+    public List<Request> getRequestsByFunderUid(String uid) {
+        return requestRepository.findAllByFunder_Uuid(uid);
+    }
 
     public Request addRequest(Request request) {
         if (request.getProjects() != null) {
             request.setRequestToFunderStatus(RequestStatus.REQUEST_PENDING);
         }
         request.setRequestStatus(RequestStatus.REVIEW);
-
+        User currentFunder = userService.getUserByEmail(request.getFunder().getUserEmail());
+        accountService.withdraw(currentFunder.getAccount().get(0), request.getRequestedAmount());
         return requestRepository.save(request);
     }
     public Request updateRequest(Request request) {
@@ -53,7 +62,6 @@ public class RequestService {
                 if(status.equals("REFUSED_ADMIN"))
                     request.setRequestStatus(RequestStatus.REFUSED_ADMIN);
 
-
                 if(status.equals("REFUSED_SG"))
                     request.setRequestStatus(RequestStatus.REFUSED_SG);
 
@@ -71,8 +79,14 @@ public class RequestService {
 
     public void removeRequest(Long reqId){
         Request request = getRequest(reqId);
+        accountService.deposit(request.getFunder().getAccount().get(0),request.getRequestedAmount());
+        request.setFunder(null);
+        request.setProjects(null);
+        //requestRepository.save(request);
         requestRepository.delete(request);
     }
+
+
     public Request getRequest(Long id){
         return requestRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No Request with ID : " + id));
