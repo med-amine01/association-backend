@@ -142,7 +142,7 @@ public class UserService {
             user.setUserPassword(getEncodedPassword(user.getUserPassword()));
             //setting uuid to the user
             user.setUuid(UUID.randomUUID().toString());
-            user.setActive(false);
+            user.setActive(true);
 
 
             return userRepository.save(user);
@@ -190,7 +190,7 @@ public class UserService {
         adminUser.setUserEmail("admin@test.com");
         adminUser.setUserFirstName("Admin");
         adminUser.setUserLastName("Admin");
-            adminUser.setUserPassword(getEncodedPassword("admin123"));
+        adminUser.setUserPassword(getEncodedPassword("admin123"));
         adminUser.setPhone("55123456");
         adminUser.setAddress("1235 xyz 456 ");
         adminUser.setActive(true);
@@ -201,13 +201,36 @@ public class UserService {
         adminUser.setRoles(adminRoles);
         userRepository.save(adminUser);
 
-        generateFunders(funderRole);
+        //---------- adding FUNDER --------------
+        User funderUser = new User();
+        funderUser.setUserEmail("funder@test.com");
+        funderUser.setUserFirstName("Funder");
+        funderUser.setUserLastName("Funder");
+        funderUser.setUserPassword(getEncodedPassword("funder123"));
+        funderUser.setPhone("55123456");
+        funderUser.setAddress("1235 xyz 456 ");
+        funderUser.setActive(true);
+        Set<Role> funderRoles = new HashSet<>();
+        funderRoles.add(funderRole);
+        //SETTING funder ROLE
+        funderUser.setUuid(UUID.randomUUID().toString());
+        funderUser.setRoles(funderRoles);
+        userRepository.save(funderUser);
+
+        Account acc = new Account();
+        acc.setCurrentBalance(0);
+        acc.setTotalBalance(0);
+        acc.setTransactionHistories(null);
+        acc.setFunder(funderUser);
+        acc.setEnable(true);
+        accountRepository.save(acc);
     }
 
+
     //GENERATING FAKE DATA FOR FUNDER
-    private void generateFunders(Role r){
+    public List<User> generateFunders() {
         Faker faker = new Faker();
-        for(int i=0; i<3; i++){
+        for(int i=0; i<3; i++) {
             User u = new User();
             String name = faker.name().firstName();
             u.setUserEmail(name.toLowerCase()+"@test.com");
@@ -219,7 +242,7 @@ public class UserService {
             u.setActive(true);
             u.setUserPassword(getEncodedPassword("funder123"));
             Set<Role> role = new HashSet<>();
-            role.add(r);
+            role.add(roleRepository.findById("ROLE_FUNDER").get());
             u.setRoles(role);
             userRepository.save(u);
 
@@ -231,6 +254,68 @@ public class UserService {
             acc.setEnable(true);
             accountRepository.save(acc);
         }
+
+        generateUsers();
+
+        return userRepository.findAllByRolesRoleName("ROLE_FUNDER");
+    }
+
+    private void generateUsers() {
+        Faker faker = new Faker();
+        //generate CEO
+        for(int i=0; i<2; i++) {
+            User u = new User();
+            String name = faker.name().firstName();
+            u.setUserEmail(name.toLowerCase()+"@test.com");
+            u.setUserFirstName(name);
+            u.setUserLastName(faker.name().lastName());
+            u.setPhone(faker.phoneNumber().cellPhone());
+            u.setAddress(faker.address().fullAddress());
+            u.setUuid(UUID.randomUUID().toString());
+            u.setActive(true);
+            u.setUserPassword(getEncodedPassword("ceo123"));
+            Set<Role> role = new HashSet<>();
+            role.add(roleRepository.findById("ROLE_CEO").get());
+            u.setRoles(role);
+            u.setAccount(null);
+            userRepository.save(u);
+        }
+
+        //generate worker
+        for(int i=0; i<2; i++) {
+            User u = new User();
+            String name = faker.name().firstName();
+            u.setUserEmail(name.toLowerCase()+"@test.com");
+            u.setUserFirstName(name);
+            u.setUserLastName(faker.name().lastName());
+            u.setPhone(faker.phoneNumber().cellPhone());
+            u.setAddress(faker.address().fullAddress());
+            u.setUuid(UUID.randomUUID().toString());
+            u.setActive(true);
+            u.setUserPassword(getEncodedPassword("worker123"));
+            Set<Role> role = new HashSet<>();
+            role.add(roleRepository.findById("ROLE_WORKER").get());
+            u.setRoles(role);
+            u.setAccount(null);
+            userRepository.save(u);
+        }
+
+        //generate SG
+        User u = new User();
+        String name = faker.name().firstName();
+        u.setUserEmail(name.toLowerCase()+"@test.com");
+        u.setUserFirstName(name);
+        u.setUserLastName(faker.name().lastName());
+        u.setPhone(faker.phoneNumber().cellPhone());
+        u.setAddress(faker.address().fullAddress());
+        u.setUuid(UUID.randomUUID().toString());
+        u.setActive(true);
+        u.setUserPassword(getEncodedPassword("sg123"));
+        Set<Role> role = new HashSet<>();
+        role.add(roleRepository.findById("ROLE_SG").get());
+        u.setRoles(role);
+        u.setAccount(null);
+        userRepository.save(u);
     }
 
     public String getEncodedPassword(String password){

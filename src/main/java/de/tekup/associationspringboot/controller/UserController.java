@@ -17,6 +17,10 @@ public class UserController {
 
     private UserService userService;
 
+    @GetMapping("/funder/generate")
+    public List<User> generateFunders() {
+        return userService.generateFunders();
+    }
 
     @GetMapping("/account/{id}")
     public User getUserByAccountId(@PathVariable("id") Long accountId) {
