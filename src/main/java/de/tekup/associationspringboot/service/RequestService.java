@@ -28,8 +28,10 @@ public class RequestService {
             request.setRequestToFunderStatus(RequestStatus.REQUEST_PENDING);
         }
         request.setRequestStatus(RequestStatus.REVIEW);
-        User currentFunder = userService.getUserByEmail(request.getFunder().getUserEmail());
-        accountService.withdraw(currentFunder.getAccount().get(0), request.getRequestedAmount());
+        if (request.getFunder()!=null) {
+            User currentFunder = userService.getUserByEmail(request.getFunder().getUserEmail());
+            accountService.withdraw(currentFunder.getAccount().get(0), request.getRequestedAmount());
+        }
         return requestRepository.save(request);
     }
     public Request updateRequest(Request request) {

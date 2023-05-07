@@ -1,6 +1,8 @@
 package de.tekup.associationspringboot.controller;
 
 import de.tekup.associationspringboot.entity.Request;
+import de.tekup.associationspringboot.enums.RequestStatus;
+import de.tekup.associationspringboot.service.CaisseService;
 import de.tekup.associationspringboot.service.RequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 public class RequestController {
 
     private RequestService requestService;
+    private CaisseService caisseService;
 
     @PostMapping("/add")
     public Request createRequest(@RequestBody Request request){
@@ -25,6 +28,10 @@ public class RequestController {
 
     @PatchMapping("/update")
     public Request updateRequest(@RequestBody Request request){
+        if (request.getRequestStatus()== RequestStatus.ACCEPTED_ADMIN||request.getRequestStatus()==RequestStatus.ACCEPTED_SG){
+            caisseService.retirer(request.getRequestedAmount());
+
+        }
         return requestService.updateRequest(request);
     }
 
