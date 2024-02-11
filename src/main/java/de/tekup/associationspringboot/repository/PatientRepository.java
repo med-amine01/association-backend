@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Repository
 @CrossOrigin("http://localhost:4200")
-public interface PatientRepository extends CrudRepository<Patient,Long> {
+public interface PatientRepository extends CrudRepository<Patient, Long> {
 }

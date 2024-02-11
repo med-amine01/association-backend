@@ -14,13 +14,13 @@ public class CorsConfig {
     private static final String PATCH = "PATCH";
 
     @Bean
-    public WebMvcConfigurer corsConfigurer(){
-        return  new WebMvcConfigurer() {
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 //allow all the request with /**
                 registry.addMapping("/**")
-                        .allowedMethods(GET,POST,DELETE,PUT,PATCH)
+                        .allowedMethods(GET, POST, DELETE, PUT, PATCH)
                         .allowedHeaders("*")
                         .allowedOriginPatterns("*")
                         .allowCredentials(true);

@@ -17,30 +17,32 @@ public class PatientController {
 
     //Generate data by hitting this endpoint from POSTMAN
     @GetMapping("/generate")
-    public Iterable<Patient> generateData(){
+    public Iterable<Patient> generateData() {
         return patientService.generateData();
     }
+
     @GetMapping("/{id}")
-    public Patient getPatientById(@PathVariable("id") Long id){
+    public Patient getPatientById(@PathVariable("id") Long id) {
         return patientService.getPatient(id);
     }
+
     @GetMapping("/getall")
-    public List<Patient> getAll(){
+    public List<Patient> getAll() {
         return patientService.getAllPatients();
     }
 
     @PostMapping("/add")
-    public Patient createPatient(@RequestBody Patient patient){
+    public Patient createPatient(@RequestBody Patient patient) {
         return patientService.addPatient(patient);
     }
 
     @PatchMapping("/update")
-    public Patient updatePatient(@RequestBody Patient patient){
+    public Patient updatePatient(@RequestBody Patient patient) {
         return patientService.updatePatient(patient);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deletePatient(@PathVariable Long id){
+    public void deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
     }
 

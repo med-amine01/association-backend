@@ -9,19 +9,22 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class CaisseController {
     private CaisseService caisseService;
+
     @GetMapping("/getsolde")
-    public Double getAmount(){
+    public Double getAmount() {
         return caisseService.getCaisse().getSolde();
     }
+
     @PostMapping("/Addsolde")
-    public Double AjouterSolde(@RequestBody Double amount){
-        if (amount>0){
-         caisseService.Ajouter(amount);
+    public Double AjouterSolde(@RequestBody Double amount) {
+        if (amount > 0) {
+            caisseService.Ajouter(amount);
         }
-         return caisseService.getCaisse().getSolde();
+        return caisseService.getCaisse().getSolde();
     }
-    @PostMapping ("/retiresolde")
-    public Double RetireSolde(@RequestBody Double amount){
+
+    @PostMapping("/retiresolde")
+    public Double RetireSolde(@RequestBody Double amount) {
         caisseService.retirer(amount);
         return caisseService.getCaisse().getSolde();
     }

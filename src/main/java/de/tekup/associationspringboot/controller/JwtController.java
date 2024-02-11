@@ -17,7 +17,7 @@ public class JwtController {
 
     //this will take userName and password and will return jwt token if the user is valid
     @PostMapping("/authenticate")
-    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest)throws Exception{
+    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         return jwtService.createJwtToken(jwtRequest);
     }
 }

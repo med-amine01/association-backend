@@ -23,18 +23,18 @@ public class RequestProjectService {
         ));
     }
 
-    public void splitAmountOnSelectedProjects(Request request){
-        if(request.getRequestedAmount() > 0){
+    public void splitAmountOnSelectedProjects(Request request) {
+        if (request.getRequestedAmount() > 0) {
             double eachAmount = request.getRequestedAmount() / request.getProjects().size();
 
             request.getProjects().forEach(project -> {
-                addRequestToProject(request,project,Math.round(eachAmount));
+                addRequestToProject(request, project, Math.round(eachAmount));
                 updateAmount(project.getId(), Math.round(eachAmount));
             });
         }
     }
 
-    private void updateAmount(Long projectId, double amount){
+    private void updateAmount(Long projectId, double amount) {
         Project p = projectService.getProject(projectId);
 
         /**
@@ -44,10 +44,9 @@ public class RequestProjectService {
          */
 
         double val = Math.round(p.getTotalAmountSpent() + amount);
-        if(val <= 0){
+        if (val <= 0) {
             p.setTotalAmountSpent(0);
-        }
-        else{
+        } else {
             p.setTotalAmountSpent(val);
         }
         projectService.updateProject(p);

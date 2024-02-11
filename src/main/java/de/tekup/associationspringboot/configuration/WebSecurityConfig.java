@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
     @Autowired
     private UserDetailsService jwtService;
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -59,8 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //this methode will crypt the password in both ways <=>
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return  new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 //    @Override
@@ -69,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Autowired
-    public void configureGloabl(AuthenticationManagerBuilder managerBuilder) throws Exception{
+    public void configureGloabl(AuthenticationManagerBuilder managerBuilder) throws Exception {
         managerBuilder.userDetailsService(jwtService).passwordEncoder(passwordEncoder());
     }
 }

@@ -17,30 +17,32 @@ public class ProjectController {
 
     //GENERATE FAKE DATA BY HITTING THIS ENDPOINT
     @GetMapping("/generate")
-    public Iterable<Project> generateData(){
+    public Iterable<Project> generateData() {
         return this.projectService.generateData();
     }
+
     @GetMapping("/{id}")
-    public Project getProjectById(@PathVariable("id") Long id){
+    public Project getProjectById(@PathVariable("id") Long id) {
         return projectService.getProject(id);
     }
+
     @GetMapping("/getall")
-    public List<Project> getAll(){
+    public List<Project> getAll() {
         return projectService.getAllProjects();
     }
 
     @PostMapping("/add")
-    public Project createProject(@RequestBody Project Project){
+    public Project createProject(@RequestBody Project Project) {
         return projectService.addProject(Project);
     }
 
     @PatchMapping("/update")
-    public Project updateProject(@RequestBody Project Project){
+    public Project updateProject(@RequestBody Project Project) {
         return projectService.updateProject(Project);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteProject(@PathVariable Long id){
+    public void deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
     }
 

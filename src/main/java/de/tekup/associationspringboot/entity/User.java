@@ -24,7 +24,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Request> requests;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     //this will create third table called USER_ROLE with two columns =>  USER_ID ; ROLE_ID
     @JoinTable(
             name = "USER_ROLE",
@@ -35,7 +35,7 @@ public class User {
 
     //make sure that mappedBy in the other entity has the same name
     //cuz if you don't set it with the same name you will get the return list empty
-    @OneToMany(mappedBy ="funder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "funder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Account> account;
 
 }

@@ -22,16 +22,15 @@ public class UserService {
     private AccountRepository accountRepository;
 
 
-
     public List<User> getUsersByCriteria(String role, boolean active) {
-        return new ArrayList<>(userRepository.findAllByRolesRoleNameAndActive(role,active));
+        return new ArrayList<>(userRepository.findAllByRolesRoleNameAndActive(role, active));
     }
 
-    public List<User> getAll(){
+    public List<User> getAll() {
         return new ArrayList<>(userRepository.findAll());
     }
 
-    public User getUser(String userUid){
+    public User getUser(String userUid) {
         return userRepository.findUserByUuid(userUid);
     }
 
@@ -39,23 +38,23 @@ public class UserService {
     public User updateUser(User user, String uuid) {
 
         User current = userRepository.findUserByUuid(uuid);
-        if(user.getUserFirstName() != null){
+        if (user.getUserFirstName() != null) {
             current.setUserFirstName(user.getUserFirstName());
         }
-        if(user.getUserLastName() != null){
+        if (user.getUserLastName() != null) {
             current.setUserLastName(user.getUserLastName());
         }
-        if(user.getAddress() != null){
+        if (user.getAddress() != null) {
             current.setAddress(user.getAddress());
         }
-        if(user.getPhone() != null){
+        if (user.getPhone() != null) {
             current.setPhone(user.getPhone());
         }
-        if(!user.getRoles().isEmpty()){
+        if (!user.getRoles().isEmpty()) {
             Set<Role> roleList = new HashSet<>();
             user.getRoles().forEach(r -> roleList.add(roleRepository.findById(r.getRoleName()).orElse(null)));
 
-            if(!roleList.isEmpty()){
+            if (!roleList.isEmpty()) {
                 current.setRoles(roleList);
             }
         }
@@ -83,7 +82,7 @@ public class UserService {
 
     public User disableUser(String uuid) {
         User user = userRepository.findUserByUuid(uuid);
-        if(user == null) {
+        if (user == null) {
             throw new NoSuchElementException("No such user found");
         }
 
@@ -97,7 +96,7 @@ public class UserService {
 
     public User enableUser(String uuid) {
         User user = userRepository.findUserByUuid(uuid);
-        if(user == null) {
+        if (user == null) {
             throw new NoSuchElementException("No such user found");
         }
 
@@ -111,18 +110,18 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userRepository.findById(email)
-                .orElseThrow(()-> new NoSuchElementException("No User with Email : " + email));
+                .orElseThrow(() -> new NoSuchElementException("No User with Email : " + email));
     }
 
     public User registerNewUser(User user) {
         //User fetchedUser = userRepository.findById(user.getUserEmail()).orElse(null);
-        if(!userRepository.existsById(user.getUserEmail())){
+        if (!userRepository.existsById(user.getUserEmail())) {
             Set<Role> roleList = new HashSet<>();
             user.getRoles().forEach(r -> {
                 roleList.add(roleRepository.findById(r.getRoleName()).orElse(null));
 
                 //setting account
-                if(r.getRoleName().equals("ROLE_FUNDER")) {
+                if (r.getRoleName().equals("ROLE_FUNDER")) {
                     Account acc = new Account();
                     acc.setCurrentBalance(0);
                     acc.setTotalBalance(0);
@@ -130,10 +129,9 @@ public class UserService {
                     acc.setTransactionHistories(null);
                     acc.setEnable(true);
                     accountRepository.save(acc);
-                    if(user.getAccount() != null) {
+                    if (user.getAccount() != null) {
                         user.getAccount().add(acc);
-                    }
-                    else {
+                    } else {
                         List<Account> tempListAccount = new ArrayList<>();
                         tempListAccount.add(acc);
                         user.setAccount(tempListAccount);
@@ -141,7 +139,7 @@ public class UserService {
                 }
             });
 
-            if(!roleList.isEmpty()){
+            if (!roleList.isEmpty()) {
                 user.setRoles(roleList);
             }
             user.setUserPassword(getEncodedPassword(user.getUserPassword()));
@@ -156,7 +154,7 @@ public class UserService {
     }
 
 
-    public void initRolesAndUsers(){
+    public void initRolesAndUsers() {
 
         //---------- adding ADMIN_ROLE -----------------
         Role adminRole = new Role();
@@ -183,18 +181,17 @@ public class UserService {
         roleRepository.save(ceoRole);
 
         //-------------- adding ROLE_SG --------------
-        Role SgRole = new Role();
-        SgRole.setRoleName("ROLE_SG");
-        SgRole.setRoleDescription("Secrétaire Generale Role");
-        roleRepository.save(SgRole);
-
+        Role sgRole = new Role();
+        sgRole.setRoleName("ROLE_SG");
+        sgRole.setRoleDescription("Secrétaire Generale Role");
+        roleRepository.save(sgRole);
 
 
         //---------- adding ADMIN --------------
         User adminUser = new User();
         adminUser.setUserEmail("admin@test.com");
         adminUser.setUserFirstName("Admin");
-        adminUser.setUserLastName("Admin");
+        adminUser.setUserLastName("admin");
         adminUser.setUserPassword(getEncodedPassword("admin123"));
         adminUser.setPhone("55123456");
         adminUser.setAddress("1235 xyz 456 ");
@@ -205,6 +202,54 @@ public class UserService {
         adminUser.setUuid(UUID.randomUUID().toString());
         adminUser.setRoles(adminRoles);
         userRepository.save(adminUser);
+
+        //---------- adding worker --------------
+        User worker = new User();
+        worker.setUserEmail("worker@test.com");
+        worker.setUserFirstName("Worker");
+        worker.setUserLastName("worker");
+        worker.setUserPassword(getEncodedPassword("worker123"));
+        worker.setPhone("12345678");
+        worker.setAddress("1235 xyz 456 ");
+        worker.setActive(true);
+        Set<Role> workerRoles = new HashSet<>();
+        workerRoles.add(workerRole);
+        //SETTING ADMIN ROLE
+        worker.setUuid(UUID.randomUUID().toString());
+        worker.setRoles(workerRoles);
+        userRepository.save(worker);
+
+        //---------- adding sg --------------
+        User sg = new User();
+        sg.setUserEmail("sg@test.com");
+        sg.setUserFirstName("sg");
+        sg.setUserLastName("sg");
+        sg.setUserPassword(getEncodedPassword("sg123"));
+        sg.setPhone("12345678");
+        sg.setAddress("1235 xyz 456 ");
+        sg.setActive(true);
+        Set<Role> sgRoles = new HashSet<>();
+        sgRoles.add(sgRole);
+        //SETTING ADMIN ROLE
+        sg.setUuid(UUID.randomUUID().toString());
+        sg.setRoles(sgRoles);
+        userRepository.save(sg);
+
+        //---------- adding sg --------------
+        User ceo = new User();
+        ceo.setUserEmail("ceo@test.com");
+        ceo.setUserFirstName("ceo");
+        ceo.setUserLastName("ceo");
+        ceo.setUserPassword(getEncodedPassword("ceo123"));
+        ceo.setPhone("12345678");
+        ceo.setAddress("1235 xyz 456 ");
+        ceo.setActive(true);
+        Set<Role> ceoRoles = new HashSet<>();
+        ceoRoles.add(ceoRole);
+        //SETTING ADMIN ROLE
+        ceo.setUuid(UUID.randomUUID().toString());
+        ceo.setRoles(ceoRoles);
+        userRepository.save(ceo);
 
         //---------- adding FUNDER --------------
         User funderUser = new User();
@@ -235,10 +280,10 @@ public class UserService {
     //GENERATING FAKE DATA FOR FUNDER
     public List<User> generateFunders() {
         Faker faker = new Faker();
-        for(int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             User u = new User();
             String name = faker.name().firstName();
-            u.setUserEmail(name.toLowerCase()+"@test.com");
+            u.setUserEmail(name.toLowerCase() + "@test.com");
             u.setUserFirstName(name);
             u.setUserLastName(faker.name().lastName());
             u.setPhone(faker.phoneNumber().cellPhone());
@@ -267,12 +312,12 @@ public class UserService {
 
     private void generateUsers() {
         Faker faker = new Faker();
-        
+
         //generate worker
-        for(int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             User u = new User();
             String name = faker.name().firstName();
-            u.setUserEmail(name.toLowerCase()+"@test.com");
+            u.setUserEmail(name.toLowerCase() + "@test.com");
             u.setUserFirstName(name);
             u.setUserLastName(faker.name().lastName());
             u.setPhone(faker.phoneNumber().cellPhone());
@@ -290,7 +335,7 @@ public class UserService {
         //generate SG
         User u = new User();
         String name = faker.name().firstName();
-        u.setUserEmail(name.toLowerCase()+"@test.com");
+        u.setUserEmail(name.toLowerCase() + "@test.com");
         u.setUserFirstName(name);
         u.setUserLastName(faker.name().lastName());
         u.setPhone(faker.phoneNumber().cellPhone());
@@ -305,7 +350,7 @@ public class UserService {
         userRepository.save(u);
     }
 
-    public String getEncodedPassword(String password){
+    public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
 }

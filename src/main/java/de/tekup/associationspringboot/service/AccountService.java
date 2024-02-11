@@ -22,7 +22,7 @@ public class AccountService {
 
     public Account getAccount(Long id) {
         return accountRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("No account with ID " +id));
+                .orElseThrow(() -> new NoSuchElementException("No account with ID " + id));
     }
 
     public List<Account> getAllAccounts() {

@@ -7,23 +7,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Caisse {
 
+    private static final Caisse instance = new Caisse();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double amount;
-    private static final    Caisse instance=new Caisse();
+
+    public static Caisse getInstance() {
+        return instance;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    //badelt hnee
-    public static Caisse getInstance() {
-        return instance;
     }
 
     public synchronized void ajouter(double montant) {
@@ -31,17 +31,13 @@ public class Caisse {
     }
 
     public synchronized void retirer(double montant) {
-        if (montant<this.amount){
-        amount -= montant;}
+        if (montant < this.amount) {
+            amount -= montant;
+        }
     }
 
     public synchronized double getSolde() {
         return amount;
     }
-
-
-
-    // getters, setters, etc.
-
 
 }

@@ -13,11 +13,11 @@ import java.util.List;
 public class RoleService {
     private RoleRepository roleRepository;
 
-    public Role createNewRole(Role role){
+    public Role createNewRole(Role role) {
         return roleRepository.save(role);
     }
 
-    public List<Role> getAllRoles(){
+    public List<Role> getAllRoles() {
         List<Role> roleList = new ArrayList<>();
         roleRepository.findAll().forEach(roleList::add);
         return roleList;

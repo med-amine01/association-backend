@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailSenderService {
     private JavaMailSender javaMailSender;
-    public void sendmail(String destinataire) throws  jakarta.mail.MessagingException {
-        MimeMessage mimeMessage=javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true);
+
+    public void sendmail(String destinataire) throws jakarta.mail.MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
         mimeMessageHelper.setFrom("mokhtarabbes9@gmail.com");
         mimeMessageHelper.setTo("mokhtarabbes9@gmail.com");
         mimeMessageHelper.setText("body of mail");

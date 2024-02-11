@@ -18,6 +18,7 @@ public class AccountController {
     public List<Account> getAll() {
         return accountService.getAllAccounts();
     }
+
     @GetMapping("/{id}")
     public Account getAccountById(@PathVariable("id") Long id) {
         return accountService.getAccount(id);
@@ -26,12 +27,12 @@ public class AccountController {
     @PostMapping("/deposit")
     public void depositMoney(@RequestBody Account account) {
         double amount = account.getTransactionHistories().get(0).getAmount();
-        accountService.deposit(account,amount);
+        accountService.deposit(account, amount);
     }
 
     @PostMapping("/withdraw")
     public void withdrawMoney(@RequestBody Account account) {
         double amount = account.getTransactionHistories().get(0).getAmount();
-        accountService.withdraw(account,amount);
+        accountService.withdraw(account, amount);
     }
 }

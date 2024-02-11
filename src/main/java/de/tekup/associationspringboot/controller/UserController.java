@@ -28,40 +28,41 @@ public class UserController {
     }
 
     @GetMapping("/getBy/{role}/{active}")
-    public List<User> getByCriteria(@PathVariable("role") String role , @PathVariable("active") String active) {
-        if(active.equals("1")) {
-            return userService.getUsersByCriteria(role,true);
+    public List<User> getByCriteria(@PathVariable("role") String role, @PathVariable("active") String active) {
+        if (active.equals("1")) {
+            return userService.getUsersByCriteria(role, true);
         }
-        return userService.getUsersByCriteria(role,false);
+        return userService.getUsersByCriteria(role, false);
     }
 
     @PostMapping("/addUser")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public User addUser(@RequestBody User user) {
-        if(userService.registerNewUser(user) == null) {
+        if (userService.registerNewUser(user) == null) {
             throw new ResponseStatusException(HttpStatus.FOUND, "User Already Exists");
         }
-        return  userService.registerNewUser(user);
+        return userService.registerNewUser(user);
     }
 
     @GetMapping("/{uuid}")
     public User getUser(@PathVariable("uuid") String userUid) {
-        if(userService.getUser(userUid) == null){
+        if (userService.getUser(userUid) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
         }
         return userService.getUser(userUid);
     }
+
     @GetMapping("/getall")
     public List<User> getAll() {
         return userService.getAll();
     }
 
     @PatchMapping("/update/{uuid}")
-    public User updateUser(@RequestBody User user, @PathVariable String uuid){
-        if(userService.updateUser(user, uuid) == null) {
+    public User updateUser(@RequestBody User user, @PathVariable String uuid) {
+        if (userService.updateUser(user, uuid) == null) {
             throw new ResponseStatusException(HttpStatus.FOUND, "User Email already exists");
         }
-        return userService.updateUser(user,uuid);
+        return userService.updateUser(user, uuid);
     }
 
     @DeleteMapping("/disable/{uuid}")
@@ -76,7 +77,7 @@ public class UserController {
 
     //this methode will be executed after the application is built
     @PostConstruct
-    public void iniRolesAndUsers(){
+    public void iniRolesAndUsers() {
         userService.initRolesAndUsers();
     }
 

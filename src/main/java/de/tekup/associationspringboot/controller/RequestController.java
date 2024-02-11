@@ -22,13 +22,13 @@ public class RequestController {
     private CaisseService caisseService;
 
     @PostMapping("/add")
-    public Request createRequest(@RequestBody Request request){
+    public Request createRequest(@RequestBody Request request) {
         return requestService.addRequest(request);
     }
 
     @PatchMapping("/update")
-    public Request updateRequest(@RequestBody Request request){
-        if (request.getRequestStatus()== RequestStatus.ACCEPTED_ADMIN||request.getRequestStatus()==RequestStatus.ACCEPTED_SG){
+    public Request updateRequest(@RequestBody Request request) {
+        if (request.getRequestStatus() == RequestStatus.ACCEPTED_ADMIN || request.getRequestStatus() == RequestStatus.ACCEPTED_SG) {
             caisseService.retirer(request.getRequestedAmount());
 
         }
@@ -36,12 +36,11 @@ public class RequestController {
     }
 
     @DeleteMapping("/delete/{reqId}")
-    public ResponseEntity<?> deleteRequest(@PathVariable("reqId") Long reqId){
+    public ResponseEntity<?> deleteRequest(@PathVariable("reqId") Long reqId) {
         try {
             requestService.removeRequest(reqId);
             return ResponseEntity.ok().build();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //this exception will appear if you try to delete accepted requests
             System.err.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR DELETING");
@@ -49,22 +48,22 @@ public class RequestController {
     }
 
     @GetMapping("/getAll")
-    public List<Request> getAllRequests(){
+    public List<Request> getAllRequests() {
         return requestService.getAll();
     }
 
     @GetMapping("/get/{reqId}")
-    public Request getRequest(@PathVariable("reqId") Long reqId){
+    public Request getRequest(@PathVariable("reqId") Long reqId) {
         return requestService.getRequest(reqId);
     }
 
     @GetMapping("/requestStatus/{status}")
-    public List<Request> reviewRequests(@PathVariable("status") String status){
+    public List<Request> reviewRequests(@PathVariable("status") String status) {
         return requestService.getRequestByStatus(status);
     }
 
     @GetMapping("/funder/{uid}")
-    public List<Request> getByUid(@PathVariable("uid")String uid) {
+    public List<Request> getByUid(@PathVariable("uid") String uid) {
         return requestService.getRequestsByFunderUid(uid);
     }
 }

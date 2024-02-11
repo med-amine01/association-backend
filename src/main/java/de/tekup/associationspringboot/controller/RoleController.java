@@ -14,13 +14,14 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
     @PostMapping("/createNewRole")
-    public Role createNewRole(@RequestBody Role role){
-        return  roleService.createNewRole(role);
+    public Role createNewRole(@RequestBody Role role) {
+        return roleService.createNewRole(role);
     }
 
     @GetMapping("/getall")
-    public List<Role> getRoles(){
+    public List<Role> getRoles() {
         return roleService.getAllRoles();
     }
 }

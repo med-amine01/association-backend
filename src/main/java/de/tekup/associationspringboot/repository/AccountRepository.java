@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 @CrossOrigin("http://localhost:4200")
-public interface AccountRepository extends JpaRepository<Account,Long> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
     //void deleteAccountsByFunder_UserEmail(String userEmail);
 
